@@ -1,0 +1,2 @@
+C:\Users\Joel\source\repos\testAPP1\x64\Release\testAPP1.exe
+C:\Users\Joel\source\repos\joeljm97\testApp2\x64\Release\testAPP1.exe

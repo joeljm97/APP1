@@ -1,0 +1,8 @@
+﻿  testAPP1.cpp
+C:\Users\Joel\source\repos\joeljm97\testApp2\testAPP1.cpp(303,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Generating code
+  0 of 529 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  testAPP1.vcxproj -> C:\Users\Joel\source\repos\joeljm97\testApp2\x64\Release\testAPP1.exe
