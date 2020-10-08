@@ -7,7 +7,6 @@
 #include <vector>
 #include <iterator>
 #include <unordered_set>
-#include <map>
 #include <ctime>
 #include <iomanip>
 
@@ -17,10 +16,10 @@ class testApp1
 {
 private:
     typedef vector<string> stringvec;
-    typedef map<string, string> stringmap;
     typedef unordered_set<string> stringset;
     stringset::iterator itr;
-    string createlogname()
+
+    string createlogname() //creates a formatted valid name for log file using time stamp
     {
         int count = 0;
         string str = "log_" + getTimeStr(), str1 = "";
@@ -36,7 +35,7 @@ private:
         str1 = str1 + ".log";
         return(str1);
     }
-    string getTimeStr()
+    string getTimeStr() // returns the timestamp
     {
         time_t now = time(0);
         string dt = ctime(&now);
@@ -48,7 +47,8 @@ private:
         return st;
     }
     string str = createlogname();
-    public:void initializeLog()
+
+    public:void initializeLog() // creating the log file and adding the column names
     {
         ofstream log;
         log.open(str);
@@ -65,7 +65,7 @@ private:
         log.close();
     }
 
-    string funcName(const char* func)
+    string funcName(const char* func) //returns current function name as a string 
     {
         string s;
         s.assign(func);
@@ -85,7 +85,7 @@ private:
         log << "\n";
     }
 
-    char* getCurDir()
+    char* getCurDir() //returns the current working directory
     {
         writetolog(__LINE__,"Inside :"+ funcName(__FUNCTION__));
 
@@ -209,14 +209,17 @@ private:
         writetolog(__LINE__, "Entered :" + funcName(__FUNCTION__));
     
         string rootDir, filepath, curfilepath;
+        char* currentDir = getCurDir();
+        bool ipcheck = false;
+        stringset currentFiles;
+        stringvec missingFiles, line;
+        stringset::iterator itr;
+        stringvec::iterator ptr;
 
         stringvec filesNeeded{ "ipt_config.xml","ipt_config_DMI1.xml","ipt_config_DMI2.xml",
             "OteCfgPc_Dmi_Iptcom_forRealDMI.cfg","tdchosts.txt" }; // a string vector containing filenames of the files needed
 
-        bool ipcheck = false;
-        stringset currentFiles;
-        char* currentDir = getCurDir();
-    
+
         read_directory(currentDir, currentFiles);
         cout << "\nFiles in current directory:";
         for (itr = currentFiles.begin(); itr != currentFiles.end(); itr++)
@@ -231,14 +234,9 @@ private:
         displaySet(currentFiles);
         writetolog(__LINE__, "Displayed list Current Files to console");
 
-        stringvec::iterator ptr;
-        stringvec missingFiles,line;
-        stringmap mp;
-        stringmap::iterator itr;
-
         int count = 0;
 
-        for (ptr = filesNeeded.begin(); ptr < filesNeeded.end(); ptr++)
+        for (ptr = filesNeeded.begin(); ptr < filesNeeded.end(); ptr++) //checks for missing files and adds it to string Vector : missingfiles
         {
             if (!currentFiles.count(*ptr))
             {
@@ -247,15 +245,18 @@ private:
             }
         }
 
-        if (count > 0)
+        if (count > 0) //if there are any missing files
         {
             cout << "\nThe missing files are : ";
-            for (ptr = missingFiles.begin(); ptr < missingFiles.end(); ptr++)
+            for (ptr = missingFiles.begin(); ptr < missingFiles.end(); ptr++) //list the missing files
                 cout << endl << *ptr;
             cout << "\n\nEnter Root Directory location:";
-            getline(cin, rootDir);
+
+            getline(cin, rootDir); //get root directory from user
+
             int i = 0;
-            for (ptr = missingFiles.begin(); ptr < missingFiles.end(); ptr++) {
+            for (ptr = missingFiles.begin(); ptr < missingFiles.end(); ptr++) //Append missing filenames to Root Directory and Current Directory and copy file to Current directory
+            {
                 filepath = rootDir + "\\" + *ptr;
                 string curTemp;
                 curTemp.assign(currentDir);
@@ -265,12 +266,13 @@ private:
             }
             cout << "\nNecessary Files have been Copied";
         }
-        else
+        else //if all files are present
         {
             cout << "\n**************************\n";
             cout << "All files are present";
             cout << "\n**************************\n";
         }
+
         cout << endl;
         read_directory(currentDir, currentFiles);
         cout << "\nFiles in current Directory:";
@@ -283,9 +285,8 @@ private:
         ofstream ft;
         string str;
         string checkfile,checkfile1;
-
         checkfile.assign(currentDir);
-        checkfile = checkfile + "\\tdchosts.txt";
+        checkfile = checkfile + "\\tdchosts.txt"; //location of tdchosts.txt
         fs.open(checkfile);
 
         if (!fs)
@@ -297,16 +298,17 @@ private:
         {
             cout << "========================================";
             cout << "\nContents of file : tdchosts.txt \n\n";
-            while(getline(fs, str))
+            while(getline(fs, str)) // printing contents of tdchosts and at the same time checking if the ip address for DMI2.lCst is 192.168.1.16
             {
                 string str_temp, key = "", value = "";
                 int pos = str.find(" ");
                 value = str.substr(0, pos);
                 key = str.substr(++pos);
-                if (key == "DMI2.lCst") 
+                if (key == "DMI2.lCst")
                 {
                 
-                    if (value != "192.168.1.16") {
+                    if (value != "192.168.1.16") //checking and correcting ip values for ecah entry and stores correct values in a String Vector: line
+                    {
                         writetolog(__LINE__, "IP for DMI2.lCst is : "+value);
                         ipcheck = true;
                         line.push_back("192.168.1.16");
@@ -328,9 +330,11 @@ private:
         
         }
         fs.close();
-        ft.open(checkfile,ios::trunc);
+
+        ft.open(checkfile,ios::trunc); //opening tdchost.txt and after clearing all contents
         int i = 1;
-        for (ptr = line.begin(); ptr < line.end(); ptr++)
+
+        for (ptr = line.begin(); ptr < line.end(); ptr++) //copy contents of string Vector : line to file :tdchost.txt
         {
             if (i % 2 != 0) 
             {
@@ -343,8 +347,9 @@ private:
             i++;
         }
         ft.close();
+
         fs.open(checkfile);
-        if (ipcheck == true)
+        if (ipcheck == true) //if content of tdchost was changed show appropriate message and display its new content
         {
             writetolog(__LINE__, "IP for DMI2.lCst is incorrect.IP for DMI2.lCst has been changed");
             cout << "\nIP for DMI2.lCst is incorrect.\nIP for DMI2.lCst has been changed\n\n";
@@ -354,7 +359,7 @@ private:
             }
             cout << endl;
         }
-        else 
+        else //if content of tdchost was not changed show appropriate message .
         {
             writetolog(__LINE__, "IP for DMI2.lCst is correct .No change required");
             cout << "\nIP for DMI2.lCst is correct . \nNo change required\n\n";

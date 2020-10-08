@@ -1,3 +1,12 @@
 ﻿  testAPP1.cpp
-C:\Users\Joel\source\repos\joeljm97\testApp2\testAPP1.cpp(104,23): warning C4101: 'p': unreferenced local variable
-  testAPP1.vcxproj -> C:\Users\Joel\source\repos\joeljm97\testApp2\x64\Debug\testAPP1.exe
+C:\Users\Joel\source\repos\APP1\testAPP1.cpp(238,29): error C2086: 'std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>> ptr': redefinition
+          with
+          [
+              _Ty=std::basic_string<char,std::char_traits<char>,std::allocator<char>>
+          ]
+C:\Users\Joel\source\repos\APP1\testAPP1.cpp(217): message : see declaration of 'ptr'
+C:\Users\Joel\source\repos\APP1\testAPP1.cpp(239,19): error C2086: 'testApp1::stringvec missingFiles': redefinition
+C:\Users\Joel\source\repos\APP1\testAPP1.cpp(215): message : see declaration of 'missingFiles'
+C:\Users\Joel\source\repos\APP1\testAPP1.cpp(239,32): error C2086: 'testApp1::stringvec line': redefinition
+C:\Users\Joel\source\repos\APP1\testAPP1.cpp(215): message : see declaration of 'line'
+C:\Users\Joel\source\repos\APP1\testAPP1.cpp(309,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
