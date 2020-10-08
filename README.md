@@ -2,4 +2,4 @@
 
 *main code for the program is found in testAPP1.cpp
 
-*Log functions have been moved to logmanager.h and has been included in testAPP1.cpp 
+*Log functions has been moved to logmanager.h and has been included in testAPP1.cpp 
