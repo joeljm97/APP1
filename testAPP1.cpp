@@ -200,7 +200,6 @@ private:
             writetolog(__LINE__, "Returned Value: 0 from" + funcName(__FUNCTION__));
             return 0;
         }
-        ;
     }
 
 
@@ -292,7 +291,6 @@ private:
         if (!fs)
         {
             cout << "Error in Opening File : " << checkfile1;
-            exit(1);
         }
         else
         {
